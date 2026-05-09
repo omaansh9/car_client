@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glassmorphism {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .neumorphism {
+    background: #e0e5ec;
+    box-shadow: 9px 9px 16px #c8ccd4, -9px -9px 16px #ffffff;
+  }
+
+  .dark .neumorphism {
+    background: #2d3748;
+    box-shadow: 9px 9px 16px #1a202c, -9px -9px 16px #4a5568;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-800 font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border border-gray-200;
+  }
+
+  .card-hover {
+    @apply transform hover:scale-105 hover:shadow-2xl transition-all duration-300;
+  }
+}
