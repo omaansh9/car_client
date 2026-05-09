@@ -211,14 +211,14 @@ const BookingsPage = () => {
                       <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
                         <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Daily Rate</div>
                         <div className="font-semibold text-gray-900 dark:text-white">
-                          ${booking.car.pricePerDay}
+                          ₹{booking.car.pricePerDay}
                         </div>
                       </div>
 
                       <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
                         <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Amount</div>
                         <div className="font-semibold text-blue-600 dark:text-blue-400">
-                          ${booking.totalPrice}
+                          ₹{booking.totalPrice}
                         </div>
                       </div>
                     </div>

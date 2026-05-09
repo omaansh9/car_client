@@ -21,7 +21,7 @@ const CarCard = ({ car }) => {
 
         {/* Price Badge */}
         <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold">
-          ${car.pricePerDay}/day
+          ₹{car.pricePerDay}/day
         </div>
 
         {/* Favorite Button */}

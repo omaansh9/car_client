@@ -111,7 +111,7 @@ const CarDetailsPage = () => {
       endDate: bookingDates.endDate
     })
       .then(() => {
-        showNotification(`Booking confirmed! Total: $${totalPrice}`, 'success')
+        showNotification(`Booking confirmed! Total: ₹${totalPrice}`, 'success')
         navigate('/bookings')
       })
       .catch(error => {
@@ -287,7 +287,7 @@ const CarDetailsPage = () => {
 
                 <div className="text-right">
                   <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                    ${car.pricePerDay}
+                    ₹{car.pricePerDay}
                   </div>
                   <div className="text-gray-600 dark:text-gray-400">per day</div>
                 </div>

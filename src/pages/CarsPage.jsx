@@ -152,7 +152,7 @@ const CarsPage = () => {
                 {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Price Range ($/day)
+                    Price Range (₹/day)
                   </label>
                   <div className="space-y-2">
                     <input
@@ -164,8 +164,8 @@ const CarsPage = () => {
                       className="w-full"
                     />
                     <div className="flex justify-between text-xs text-gray-500">
-                      <span>${filters.priceRange[0]}</span>
-                      <span>${filters.priceRange[1]}</span>
+                      <span>₹{filters.priceRange[0]}</span>
+                      <span>₹{filters.priceRange[1]}</span>
                     </div>
                   </div>
                 </div>
