@@ -223,7 +223,7 @@ const HomePage = () => {
 
             {/* Developer Image */}
             <img
-              src="/public/dev.jpeg"
+              src="dev.jpeg"
               alt="Omaansh"
               className="w-40 h-40 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6"
             />

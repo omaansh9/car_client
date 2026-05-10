@@ -51,6 +51,9 @@ export const getCar = id => publicApi.get(`/api/cars/${id}`).then(res => res.dat
 export const createBooking = payload => userApi.post('/api/bookings', payload).then(res => res.data)
 export const getUserBookings = () => userApi.get('/api/bookings').then(res => res.data.data)
 export const cancelBooking = bookingId => userApi.put(`/api/bookings/${bookingId}/cancel`).then(res => res.data)
+
+export const createPaymentIntent = payload => userApi.post('/api/payments/create-payment-intent', payload).then(res => res.data)
+export const confirmPayment = payload => userApi.post('/api/payments/confirm-payment', payload).then(res => res.data)
 export const getAllBookings = () => adminApi.get('/api/bookings/all').then(res => res.data.data)
 
 export const registerAdmin = payload => adminApi.post('/api/admin/register', payload).then(res => res.data)
@@ -59,3 +62,8 @@ export const loginAdmin = payload => adminApi.post('/api/admin/login', payload).
 export const addCar = payload => adminApi.post('/api/cars', payload).then(res => res.data)
 export const updateCar = (carId, payload) => adminApi.put(`/api/cars/${carId}`, payload).then(res => res.data)
 export const deleteCar = carId => adminApi.delete(`/api/cars/${carId}`).then(res => res.data)
+
+export const getAllUsers = () => adminApi.get('/api/users').then(res => res.data)
+export const getUser = userId => adminApi.get(`/api/users/${userId}`).then(res => res.data)
+export const updateUser = (userId, payload) => adminApi.put(`/api/users/${userId}`, payload).then(res => res.data)
+export const deleteUser = userId => adminApi.delete(`/api/users/${userId}`).then(res => res.data)

@@ -63,7 +63,7 @@ const CarsPage = () => {
 
   const clearFilters = () => {
     setFilters({
-      priceRange: [0, 500],
+      priceRange: [0, 20000000],
       brand: '',
       fuelType: '',
       transmission: '',
@@ -158,7 +158,7 @@ const CarsPage = () => {
                     <input
                       type="range"
                       min="0"
-                      max="500"
+                      max="20000000"
                       value={filters.priceRange[1]}
                       onChange={(e) => handleFilterChange('priceRange', [filters.priceRange[0], parseInt(e.target.value)])}
                       className="w-full"
