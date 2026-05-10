@@ -22,7 +22,7 @@ const BookingsPage = () => {
   const { showNotification } = useNotification()
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('all') // all, active, completed, cancelled
+  const [filter, setFilter] = useState('all') // all, pending, active, completed, cancelled
 
   useEffect(() => {
     if (!user) {
@@ -37,6 +37,7 @@ const BookingsPage = () => {
         const bookingsList = Array.isArray(data)
           ? data.map(booking => ({
               ...booking,
+              status: booking.paymentStatus === 'paid' && booking.status === 'pending' ? 'active' : booking.status,
               car: {
                 ...booking.carId,
                 pricePerDay: booking.carId?.pricePerDay
@@ -59,6 +60,19 @@ const BookingsPage = () => {
   })
 
   const handleCancelBooking = (bookingId) => {
+    const booking = bookings.find(b => b._id === bookingId)
+    if (!booking) return
+
+    if (booking.status === 'pending') {
+      showNotification('Cannot cancel a booking with pending payment. Please wait for payment to complete or contact support.', 'warning')
+      return
+    }
+
+    if (booking.status !== 'active') {
+      showNotification('This booking cannot be cancelled.', 'warning')
+      return
+    }
+
     cancelBooking(bookingId)
       .then(() => {
         setBookings(prev => prev.map(booking =>
@@ -77,6 +91,7 @@ const BookingsPage = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
+      case 'pending': return 'bg-yellow-500'
       case 'active': return 'bg-blue-500'
       case 'completed': return 'bg-green-500'
       case 'cancelled': return 'bg-red-500'
@@ -86,7 +101,8 @@ const BookingsPage = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'active': return <Clock className="h-4 w-4" />
+      case 'pending': return <Clock className="h-4 w-4" />
+      case 'active': return <CheckCircle className="h-4 w-4" />
       case 'completed': return <CheckCircle className="h-4 w-4" />
       case 'cancelled': return <X className="h-4 w-4" />
       default: return <AlertCircle className="h-4 w-4" />
@@ -132,6 +148,7 @@ const BookingsPage = () => {
             <div className="flex space-x-2">
               {[
                 { key: 'all', label: 'All Bookings', count: bookings.length },
+                { key: 'pending', label: 'Pending Payment', count: bookings.filter(b => b.status === 'pending').length },
                 { key: 'active', label: 'Active', count: bookings.filter(b => b.status === 'active').length },
                 { key: 'completed', label: 'Completed', count: bookings.filter(b => b.status === 'completed').length },
                 { key: 'cancelled', label: 'Cancelled', count: bookings.filter(b => b.status === 'cancelled').length }

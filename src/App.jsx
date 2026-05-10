@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext.jsx'
+import { AdminProvider } from './contexts/AdminContext.jsx'
 import { NotificationProvider } from './contexts/NotificationContext.jsx'
 import Header from './components/Header.jsx'
 import Notifier from './components/Notifier.jsx'
@@ -44,11 +45,13 @@ const AppShell = () => {
 function App() {
   return (
     <AuthProvider>
-      <NotificationProvider>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <AppShell />
-        </BrowserRouter>
-      </NotificationProvider>
+      <AdminProvider>
+        <NotificationProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <AppShell />
+          </BrowserRouter>
+        </NotificationProvider>
+      </AdminProvider>
     </AuthProvider>
   )
 }

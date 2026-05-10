@@ -19,7 +19,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { useNotification } from '../contexts/NotificationContext.jsx'
-import { createBooking, getCar } from '../services/api.js'
+import { createPaymentIntent, getCar } from '../services/api.js'
+import StripePaymentModal from '../components/StripePaymentModal.jsx'
 
 const CarDetailsPage = () => {
   const { id } = useParams()
@@ -36,6 +37,8 @@ const CarDetailsPage = () => {
     endDate: ''
   })
   const [bookingLoading, setBookingLoading] = useState(false)
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [paymentData, setPaymentData] = useState(null)
 
   useEffect(() => {
     setLoading(true)
@@ -102,20 +105,31 @@ const CarDetailsPage = () => {
       return
     }
 
-    const totalPrice = days * car.pricePerDay
     setBookingLoading(true)
 
-    createBooking({
+    createPaymentIntent({
       carId: car._id,
       startDate: bookingDates.startDate,
       endDate: bookingDates.endDate
     })
-      .then(() => {
-        showNotification(`Booking confirmed! Total: ₹${totalPrice}`, 'success')
-        navigate('/bookings')
+      .then(response => {
+        if (response.success) {
+          setPaymentData({
+            clientSecret: response.data.clientSecret,
+            bookingData: {
+              ...response.data,
+              car: response.data.car,
+              totalPrice: response.data.totalPrice,
+              days: response.data.days
+            }
+          })
+          setPaymentModalOpen(true)
+        } else {
+          showNotification(response.message || 'Failed to initiate payment', 'error')
+        }
       })
       .catch(error => {
-        const message = error?.response?.data?.message || error.message || 'Booking failed. Please try again.'
+        const message = error?.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.'
         console.error(error)
         showNotification(message, 'error')
       })
@@ -393,17 +407,17 @@ const CarDetailsPage = () => {
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600 dark:text-gray-400">
-                      ${car.pricePerDay} × {Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24))} days
+                      ₹{car.pricePerDay} x {Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24))} days
                     </span>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      ${Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24)) * car.pricePerDay}
+                      ₹{Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24)) * car.pricePerDay}
                     </span>
                   </div>
                   <div className="border-t border-gray-200 dark:border-gray-600 pt-2">
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span className="text-gray-900 dark:text-white">Total</span>
                       <span className="text-blue-600 dark:text-blue-400">
-                        ${Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24)) * car.pricePerDay}
+                        ₹{Math.ceil((new Date(bookingDates.endDate) - new Date(bookingDates.startDate)) / (1000 * 60 * 60 * 24)) * car.pricePerDay}
                       </span>
                     </div>
                   </div>
@@ -448,6 +462,21 @@ const CarDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <StripePaymentModal
+        isOpen={paymentModalOpen}
+        onClose={() => {
+          setPaymentModalOpen(false)
+          setPaymentData(null)
+        }}
+        clientSecret={paymentData?.clientSecret}
+        bookingData={paymentData?.bookingData}
+        onSuccess={() => {
+          showNotification('Booking confirmed successfully!', 'success')
+          navigate('/bookings')
+        }}
+      />
     </div>
   )
 }
